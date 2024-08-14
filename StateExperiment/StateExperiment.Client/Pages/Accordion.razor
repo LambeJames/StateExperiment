@@ -1,0 +1,33 @@
+﻿@rendermode @(new InteractiveWebAssemblyRenderMode(prerender: false))
+
+<h3>Accordion @handler</h3>
+<button @onclick="Toggle">toggle</button>
+<p hidden="@open">
+    dsfdsdsfdsfdsfdsf
+    sdfdsfdsfdsfdsfds
+
+    sdfdsfdsfdsfdsfds
+
+    sdfdsfdsfdsdsfs
+</p>
+
+@code {
+    private bool open { get; set; }
+    private string? handler;
+
+    private void Toggle(){
+        open = !open;
+    }
+
+    protected override async Task OnInitializedAsync()
+    {
+        if (OperatingSystem.IsBrowser())
+        {
+            handler = "WASM";
+        }
+        else
+        {
+            handler = "Server";
+        }
+    }
+}

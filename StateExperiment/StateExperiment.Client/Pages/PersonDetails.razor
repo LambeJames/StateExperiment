@@ -1,0 +1,30 @@
+﻿@page "/persondetails"
+@rendermode @(new InteractiveWebAssemblyRenderMode(prerender: false))
+@inject StateExperiment.Shared.StateContainers.IPolicyStateContainer policyStateContainer;
+
+<h3>PersonDetails @handler</h3>
+
+<h2>@FirstName @LastName</h2>
+
+@code {
+    private string? FirstName { get; set; }
+    private string? LastName { get; set; }
+    string handler;
+
+
+    protected override async Task OnInitializedAsync()
+    {
+        var person = await policyStateContainer.GetPolicy();
+        FirstName = person.FirstName;
+        LastName = person.LastName;
+
+        if (OperatingSystem.IsBrowser())
+        {
+            handler = "WASM";
+        }
+        else
+        {
+            handler = "Server";
+        }
+    }
+}

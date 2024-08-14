@@ -1,0 +1,16 @@
+﻿@page "/"
+@rendermode @(new InteractiveServerRenderMode(prerender: false))
+@inject Blazored.SessionStorage.ISessionStorageService sessionStorage
+
+<PageTitle>Home</PageTitle>
+
+<h1>Hello, world!</h1>
+
+Welcome to your new app.
+
+@code {
+    protected override async Task OnInitializedAsync()
+    {
+        await sessionStorage.SetItemAsync("name", "John Smith");
+    }
+}

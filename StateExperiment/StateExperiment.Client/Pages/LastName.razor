@@ -1,0 +1,51 @@
+﻿@page "/lastname"
+@rendermode @(new InteractiveAutoRenderMode(prerender: false))
+@inject StateExperiment.Shared.StateContainers.IPolicyStateContainer policyStateContainer;
+@inject NavigationManager NavManager
+
+<h3>LastName @handler</h3>
+
+<form method="post" @onsubmit="Submit" @formname="lastname">
+    <AntiforgeryToken />
+    <div>
+        <label>
+            Last Name: 
+            <InputText @bind-Value="Lastname" />
+        </label>
+    </div>
+
+    <button type="submit">Next</button>
+    <a href="#" @onclick="Back">Back</a>
+</form>
+
+@code {
+    private string? Lastname { get; set; }
+    string handler;
+
+
+    protected override async Task OnInitializedAsync()
+    {
+        var policy = await policyStateContainer.GetPolicy();
+        Lastname = policy.LastName;
+
+        if (OperatingSystem.IsBrowser())
+        {
+            handler = "WASM";
+        }
+        else
+        {
+            handler = "Server";
+        }
+    }
+
+    private async Task Submit()
+    {
+        await policyStateContainer.SetLastName(Lastname ?? "");
+        NavManager.NavigateTo("/persondetails");
+    }
+
+    private void Back()
+    {
+        NavManager.NavigateTo("/firstname");
+    }
+}
